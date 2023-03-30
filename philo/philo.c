@@ -6,7 +6,7 @@
 /*   By: gunjkim <gunjkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 12:14:12 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/03/28 12:22:20 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/03/30 21:20:30 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,9 @@
 
 int	main(int argc, char *argv[])
 {
-	
+	pthread_mutex_t	*fork;
+
+	if (argc != 5 || argc != 6)
+		return (0);
+	return (0);
 }
