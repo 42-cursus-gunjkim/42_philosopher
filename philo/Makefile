@@ -18,7 +18,7 @@ $(OBJ_DIR)%.o : %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 test: fclean
-	$(CC) $(CFLAGS) -g -o philosopher $(SRCS)
+	$(CC) $(CFLAGS) -fsanitize=address -o philosopher $(SRCS)
 
 clean:
 	rm -rf philosopher.dSYM

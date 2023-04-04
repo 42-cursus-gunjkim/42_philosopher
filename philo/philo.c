@@ -12,13 +12,13 @@
 
 #include "philo.h"
 
-t_fork *init_fork(int philo_count)
+t_fork	*init_fork(int philo_count)
 {
 	int		i;
 	t_fork	*forks;
 
 	i = 0;
-	forks = (t_fork *)malloc(sizeof(t_fork) & philo_count);
+	forks = (t_fork *)malloc(sizeof(t_fork) * philo_count);
 	if (forks == NULL)
 		return (NULL);
 	while (i < philo_count)
@@ -34,11 +34,11 @@ t_fork *init_fork(int philo_count)
 	return (forks);
 }
 
-t_info *init_infos(t_fork *fork, t_common *common, int philo_count)
+t_info	*init_infos(t_fork *fork, t_common *common, int philo_count)
 {
-	int	i;
-	t_info *infos;
-	
+	int		i;
+	t_info	*infos;
+
 	i = 0;
 	infos = (t_info *)malloc(sizeof(t_info) * philo_count);
 	if (infos == NULL)
@@ -46,7 +46,7 @@ t_info *init_infos(t_fork *fork, t_common *common, int philo_count)
 		free(fork);
 		return (NULL);
 	}
-	while(i < philo_count)
+	while (i < philo_count)
 	{
 		infos[i].id = i;
 		infos[i].total = 0;
@@ -64,7 +64,7 @@ t_info *init_infos(t_fork *fork, t_common *common, int philo_count)
 
 int	main(int argc, char *argv[])
 {
-	pthread_mutex_t	log;
+	pthread_t		*philos;
 	t_common		common;
 	t_fork			*forks;
 	t_info			*infos;
@@ -74,14 +74,20 @@ int	main(int argc, char *argv[])
 		return (0);
 	if (parse_argv(argc, argv, &common, &philo_count) == -1)
 		return (0);
-	pthread_mutex_init(&log, NULL);
-	common.log = &log;
+	pthread_mutex_init(&common.log, NULL);
 	forks = init_fork(philo_count);
 	if (forks == NULL)
 		return (0);
 	infos = init_infos(forks, &common, philo_count);
 	if (infos == NULL)
 		return (0);
-	spaghetti_time(infos, philo_count);
+	philos = (pthread_t *)malloc(sizeof(pthread_t) * philo_count);
+	if (philos == NULL)
+	{
+		free(infos);
+		free(forks);
+		return (0);
+	}
+	spaghetti_time(philos, infos, philo_count);
 	return (0);
 }

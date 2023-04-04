@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   spaghetti_time.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gunjkim <gunjkim@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: gunjkim <gunjkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 14:31:30 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/04/02 22:02:19 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/04/04 17:25:06 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-//the functhion that thread run
 void	*life_of_philo(void *arg)
 {
 	t_info	*info;
@@ -22,15 +21,15 @@ void	*life_of_philo(void *arg)
 	{
 		if (info->time_to_die == 1)
 			return (NULL);
-		pthread_mutex_lock(&info->left->key);
+		pthread_mutex_lock(&(info->left->key));
 		put_log_msg(FORK, info->id, info->common);
-		pthread_mutex_lock(&info->right->key);
+		pthread_mutex_lock(&(info->right->key));
 		put_log_msg(FORK, info->id, info->common);
 		put_log_msg(EAT, info->id, info->common);
 		gettimeofday(&info->last_eat, NULL);
 		usleep(info->common->time_eat);
-		pthread_mutex_unlock(&info->left->key);
-		pthread_mutex_unlock(&info->right->key);
+		pthread_mutex_unlock(&(info->left->key));
+		pthread_mutex_unlock(&(info->right->key));
 		put_log_msg(SLEEP, info->id, info->common);
 		usleep(info->common->time_sleep);
 		put_log_msg(THINK, info->id, info->common);
@@ -39,8 +38,6 @@ void	*life_of_philo(void *arg)
 	return (NULL);
 }
 
-//the functhin that monitor the every info->last_eat is bigger than common->time_die
-//if it is bigger, set info->time_to_die is 1
 void	monitor(t_info *infos, int philo_count)
 {
 	int				i;
@@ -69,21 +66,22 @@ void	monitor(t_info *infos, int philo_count)
 	}
 }
 
-//the function that each thread create and runs and monitor the statue of the philosopher
-int	spaghetti_time(t_info *infos, int philo_count)
+int	spaghetti_time(pthread_t *philos, t_info *infos, int philo_count)
 {
-	pthread_t	*philos;
-	int			i;
+	int	i;
 
 	i = 0;
-	philos = (pthread_t *)malloc(sizeof(pthread_t) * philo_count);
-	if (philos == NULL)
-		return (-1);
 	gettimeofday(&infos[0].common->start_time, NULL);
 	while (i < philo_count)
 	{
+		printf("%d\n", i);
 		gettimeofday(&infos[i].last_eat, NULL);
 		pthread_create(&philos[i], NULL, life_of_philo, (void *)(&infos[i]));
+		i++;
+	}
+	i = 0;
+	while (i < philo_count)
+	{
 		pthread_detach(philos[i]);
 		i++;
 	}
