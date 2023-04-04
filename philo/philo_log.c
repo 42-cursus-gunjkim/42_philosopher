@@ -18,23 +18,21 @@ long	diff_time(struct timeval *t1, struct timeval *t2)
 	(t2->tv_usec - t1->tv_usec) / 1000);
 }
 
-void	put_log_msg(int state, int id, t_common *common)
+void	put_log_msg(int state, t_info *info)
 {
-	struct timeval	cur_time;
 	long long		diff;
 
-	pthread_mutex_lock(&common->log);
-	gettimeofday(&cur_time, NULL);
-	diff = diff_time(&common->start_time, &cur_time);
+	pthread_mutex_lock(&info->common->log);
+	diff = diff_time(&info->common->start_time, &info->cur);
 	if (state == FORK)
-		printf("%lld %d has taken a fork\n", diff, id);
+		printf("%lld %d has taken a fork\n", diff, info->id);
 	else if (state == EAT)
-		printf("%lld %d is eating\n", diff, id);
+		printf("%lld %d is eating\n", diff, info->id);
 	else if (state == SLEEP)
-		printf("%lld %d is sleeping\n", diff, id);
+		printf("%lld %d is sleeping\n", diff, info->id);
 	else if (state == THINK)
-		printf("%lld %d is thinking\n", diff, id);
+		printf("%lld %d is thinking\n", diff, info->id);
 	else if (state == DEATH)
-		printf("%lld %d died\n", diff, id);
-	pthread_mutex_unlock(&common->log);
+		printf("%lld %d died\n", diff, info->id);
+	pthread_mutex_unlock(&info->common->log);
 }

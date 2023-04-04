@@ -4,7 +4,7 @@ CFLAGS = -Wall -Wextra -Werror
 
 OBJ_DIR = ./obj/
 
-SRCS = parser.c philo_log.c philo.c spaghetti_time.c
+SRCS = parser.c philo_log.c philo.c spaghetti_time.c philo_utils.c
 
 OBJS = $(addprefix $(OBJ_DIR), $(SRCS:.c=.o))
 
@@ -18,7 +18,7 @@ $(OBJ_DIR)%.o : %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 test: fclean
-	$(CC) $(CFLAGS) -fsanitize=address -o philosopher $(SRCS)
+	$(CC) $(CFLAGS) -g -o philosopher $(SRCS)
 
 clean:
 	rm -rf philosopher.dSYM

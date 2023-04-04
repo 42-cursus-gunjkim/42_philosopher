@@ -48,7 +48,7 @@ t_info	*init_infos(t_fork *fork, t_common *common, int philo_count)
 	}
 	while (i < philo_count)
 	{
-		infos[i].id = i;
+		infos[i].id = i + 1;
 		infos[i].total = 0;
 		infos[i].left = &fork[i];
 		if (i == philo_count - 1)

@@ -6,7 +6,7 @@
 /*   By: gunjkim <gunjkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 12:14:15 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/04/04 13:41:23 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/04/04 20:48:08 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <sys/time.h>
 # include <stdio.h>
 
+# define MILLI 1000
+
 # define NO_TIME_FULL -1
 # define FORK 0
 # define EAT 1
@@ -31,10 +33,10 @@ typedef struct s_common
 {
 	pthread_mutex_t	log;
 	struct timeval	start_time;
-	int				time_die;
-	int				time_eat;
-	int				time_think;
-	int				time_sleep;
+	long long		time_die;
+	long long		time_eat;
+	long long		time_think;
+	long long		time_sleep;
 	int				full;
 }	t_common;
 
@@ -48,9 +50,11 @@ typedef struct s_info
 {
 	int				id;
 	int				total;
+	int				done;
 	int				time_to_die;
 	t_common		*common;
 	struct timeval	last_eat;
+	struct timeval	cur;
 	t_fork			*left;
 	t_fork			*right;
 }	t_info;
@@ -58,7 +62,10 @@ typedef struct s_info
 char	*ft_itoa(long long n);
 int		parse_argv(int argc, char *argv[], t_common *common, int *philo_count);
 int		spaghetti_time(pthread_t *philos, t_info *infos, int philo_count);
-void	put_log_msg(int	state, int	id, t_common *common);
+void	put_log_msg(int state, t_info *info);
 long	diff_time(struct timeval *t1, struct timeval *t2);
+void	grap_two_fork(t_info *info);
+void	eat_spaghetti(t_info *info);
+void	philo_sleep_finally_think(t_info *info);
 
 #endif
