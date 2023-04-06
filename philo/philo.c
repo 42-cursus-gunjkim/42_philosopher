@@ -57,6 +57,8 @@ t_info	*init_infos(t_fork *fork, t_common *common, int philo_count)
 			infos[i].right = &fork[i + 1];
 		infos[i].common = common;
 		infos[i].time_to_die = 0;
+		pthread_mutex_init(&infos[i].ttd_lock, NULL);
+		pthread_mutex_init(&infos[i].info_lock, NULL);
 		i++;
 	}
 	return (infos);
@@ -89,5 +91,6 @@ int	main(int argc, char *argv[])
 		return (0);
 	}
 	spaghetti_time(philos, infos, philo_count);
+	printf("main end\n");
 	return (0);
 }

@@ -14,16 +14,25 @@
 
 long	diff_time(struct timeval *t1, struct timeval *t2)
 {
-	return ((t2->tv_sec - t1->tv_sec) * 1000 + \
-	(t2->tv_usec - t1->tv_usec) / 1000);
+	return ((t2->tv_sec - t1->tv_sec) * MILLI + \
+	(t2->tv_usec / MILLI - t1->tv_usec / MILLI));
 }
 
 void	put_log_msg(int state, t_info *info)
 {
 	long long		diff;
+	struct timeval	cur;
 
 	pthread_mutex_lock(&info->common->log);
-	diff = diff_time(&info->common->start_time, &info->cur);
+	pthread_mutex_lock(&info->ttd_lock);
+	if (info->time_to_die == 1)
+	{
+		pthread_mutex_unlock(&info->ttd_lock);
+		return ;
+	}
+	pthread_mutex_unlock(&info->ttd_lock);
+	gettimeofday(&cur, NULL);
+	diff = diff_time(&info->common->start_time, &cur);
 	if (state == FORK)
 		printf("%lld %d has taken a fork\n", diff, info->id);
 	else if (state == EAT)

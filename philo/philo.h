@@ -6,7 +6,7 @@
 /*   By: gunjkim <gunjkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 12:14:15 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/04/04 20:48:08 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/04/07 00:07:42 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_common
 {
 	pthread_mutex_t	log;
 	struct timeval	start_time;
+	struct timeval	cur;
 	long long		time_die;
 	long long		time_eat;
 	long long		time_think;
@@ -54,9 +55,10 @@ typedef struct s_info
 	int				time_to_die;
 	t_common		*common;
 	struct timeval	last_eat;
-	struct timeval	cur;
 	t_fork			*left;
 	t_fork			*right;
+	pthread_mutex_t	ttd_lock;
+	pthread_mutex_t	info_lock;
 }	t_info;
 
 char	*ft_itoa(long long n);
@@ -67,5 +69,6 @@ long	diff_time(struct timeval *t1, struct timeval *t2);
 void	grap_two_fork(t_info *info);
 void	eat_spaghetti(t_info *info);
 void	philo_sleep_finally_think(t_info *info);
+void	get_time(long long time);
 
 #endif

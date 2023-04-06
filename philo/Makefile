@@ -1,4 +1,4 @@
-NAME = philosopher
+NAME = philo
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
@@ -18,7 +18,7 @@ $(OBJ_DIR)%.o : %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 test: fclean
-	$(CC) $(CFLAGS) -g -o philosopher $(SRCS)
+	$(CC) $(CFLAGS) -fsanitize=thread -o $(NAME) $(SRCS)
 
 clean:
 	rm -rf philosopher.dSYM
