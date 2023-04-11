@@ -6,7 +6,7 @@
 /*   By: gunjkim <gunjkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 12:14:15 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/04/07 00:07:42 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/04/07 05:04:37 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # define SLEEP 3
 # define DEATH 4
 
-typedef struct s_common
+typedef struct s_com
 {
 	pthread_mutex_t	log;
 	struct timeval	start_time;
@@ -39,7 +39,8 @@ typedef struct s_common
 	long long		time_think;
 	long long		time_sleep;
 	int				full;
-}	t_common;
+	int				all_full;
+}	t_com;
 
 typedef struct s_fork
 {
@@ -53,22 +54,21 @@ typedef struct s_info
 	int				total;
 	int				done;
 	int				time_to_die;
-	t_common		*common;
-	struct timeval	last_eat;
+	int				ing;
+	t_com			*com;
+	struct timeval	last;
 	t_fork			*left;
 	t_fork			*right;
 	pthread_mutex_t	ttd_lock;
 	pthread_mutex_t	info_lock;
 }	t_info;
 
-char	*ft_itoa(long long n);
-int		parse_argv(int argc, char *argv[], t_common *common, int *philo_count);
-int		spaghetti_time(pthread_t *philos, t_info *infos, int philo_count);
+int		parse_argv(int argc, char *argv[], t_com *com, int *philo_count);
+void	spaghetti_time(pthread_t *philos, t_info *infos, int philo_count);
 void	put_log_msg(int state, t_info *info);
 long	diff_time(struct timeval *t1, struct timeval *t2);
-void	grap_two_fork(t_info *info);
-void	eat_spaghetti(t_info *info);
-void	philo_sleep_finally_think(t_info *info);
+void	philo_eat(t_info *info);
+void	philo_sleep_think(t_info *info);
 void	get_time(long long time);
 
 #endif

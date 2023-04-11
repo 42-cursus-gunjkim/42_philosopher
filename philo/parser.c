@@ -6,7 +6,7 @@
 /*   By: gunjkim <gunjkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 13:17:15 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/04/06 16:19:30 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/04/07 04:53:07 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,19 @@ static int	ft_atol(const char *str)
 	return (result * sign);
 }
 
-int	parse_argv(int argc, char *argv[], t_common *common, int *philo_count)
+int	parse_argv(int argc, char *argv[], t_com *com, int *philo_count)
 {
 	*philo_count = ft_atol(argv[1]);
-	common->time_die = ft_atol(argv[2]);
-	common->time_eat = ft_atol(argv[3]);
-	common->time_sleep = ft_atol(argv[4]);
+	com->time_die = ft_atol(argv[2]);
+	com->time_eat = ft_atol(argv[3]);
+	com->time_sleep = ft_atol(argv[4]);
+	com->all_full = 0;
 	if (argc == 6)
-		common->full = ft_atol(argv[5]);
+		com->full = ft_atol(argv[5]);
 	else
-		common->full = NO_TIME_FULL;
-	if (*philo_count <= 0 || common->time_die < 0 || common->time_eat < 0 || \
-	common->time_sleep < 0 || (common->full < 0 && argc == 6))
+		com->full = NO_TIME_FULL;
+	if (*philo_count <= 0 || com->time_die < 0 || com->time_eat < 0 || \
+	com->time_sleep < 0 || (com->full < 0 && argc == 6))
 		return (-1);
 	return (1);
 }

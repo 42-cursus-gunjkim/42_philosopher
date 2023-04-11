@@ -34,7 +34,7 @@ t_fork	*init_fork(int philo_count)
 	return (forks);
 }
 
-t_info	*init_infos(t_fork *fork, t_common *common, int philo_count)
+t_info	*init_infos(t_fork *fork, t_com *com, int philo_count)
 {
 	int		i;
 	t_info	*infos;
@@ -51,12 +51,10 @@ t_info	*init_infos(t_fork *fork, t_common *common, int philo_count)
 		infos[i].id = i + 1;
 		infos[i].total = 0;
 		infos[i].left = &fork[i];
-		if (i == philo_count - 1)
-			infos[i].right = &fork[0];
-		else
-			infos[i].right = &fork[i + 1];
-		infos[i].common = common;
+		infos[i].right = &fork[(i + 1) % philo_count];
+		infos[i].com = com;
 		infos[i].time_to_die = 0;
+		infos[i].ing = 0;
 		pthread_mutex_init(&infos[i].ttd_lock, NULL);
 		pthread_mutex_init(&infos[i].info_lock, NULL);
 		i++;
@@ -64,23 +62,37 @@ t_info	*init_infos(t_fork *fork, t_common *common, int philo_count)
 	return (infos);
 }
 
+void	clear_exit(pthread_t *philos, t_fork *forks, t_info *infos)
+{
+	free(philos);
+	free(infos);
+	free(forks);
+}
+
+int	argv_check(int argc, char **argv, t_com *com, int *philo_count)
+{
+	if (argc != 5 && argc != 6)
+		return (-1);
+	if (parse_argv(argc, argv, com, philo_count) == -1)
+		return (-1);
+	return (0);
+}
+
 int	main(int argc, char *argv[])
 {
 	pthread_t		*philos;
-	t_common		common;
+	t_com			com;
 	t_fork			*forks;
 	t_info			*infos;
 	int				philo_count;
 
-	if (argc != 5 && argc != 6)
+	if (argv_check(argc, argv, &com, &philo_count) == -1)
 		return (0);
-	if (parse_argv(argc, argv, &common, &philo_count) == -1)
-		return (0);
-	pthread_mutex_init(&common.log, NULL);
+	pthread_mutex_init(&com.log, NULL);
 	forks = init_fork(philo_count);
 	if (forks == NULL)
 		return (0);
-	infos = init_infos(forks, &common, philo_count);
+	infos = init_infos(forks, &com, philo_count);
 	if (infos == NULL)
 		return (0);
 	philos = (pthread_t *)malloc(sizeof(pthread_t) * philo_count);
@@ -91,6 +103,6 @@ int	main(int argc, char *argv[])
 		return (0);
 	}
 	spaghetti_time(philos, infos, philo_count);
-	printf("main end\n");
+	clear_exit(philos, forks, infos);
 	return (0);
 }
