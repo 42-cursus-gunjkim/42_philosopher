@@ -3,9 +3,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
 OBJ_DIR = ./obj/
-
-SRCS = parser.c philo.c spaghetti_time.c philo_utils.c
-
+SRCS = 
 OBJS = $(addprefix $(OBJ_DIR), $(SRCS:.c=.o))
 
 all: $(NAME)
@@ -13,16 +11,16 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $^
 
-$(OBJ_DIR)%.o : %.c
-	@test -d $(OBJ_DIR) && mkdir -p $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+$(OBJ_DIR)%.o: %.c
+	@test -d $(OBJ_DIR) || mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) -o $@ -c $^
 
 clean:
 	rm -rf $(OBJ_DIR)
 
 fclean: clean
-	rm -f $(NAME)
+	rm $(NAME)
 
 re: fclean all
 
-.phony: all clean fclean re
+.PHONY: all clean fclean re
