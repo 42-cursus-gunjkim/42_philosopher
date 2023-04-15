@@ -6,7 +6,7 @@
 /*   By: gunjkim <gunjkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 19:40:32 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/04/14 22:02:56 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/04/15 20:14:38 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ int	safe_check(pthread_mutex_t *mtx, void *target, long value)
 	int ret;
 	long	*tmp;
 
-	tmp = (long *)target;
 	pthread_mutex_lock(mtx);
+	tmp = (long *)target;
 	ret = (*tmp) - value;
 	pthread_mutex_unlock(mtx);
 	return (ret);
@@ -27,9 +27,9 @@ int	safe_check(pthread_mutex_t *mtx, void *target, long value)
 void	safe_set(pthread_mutex_t *mtx, void *target, long value)
 {
 	long	*tmp;
-	
-	tmp = (long *)target;
+
 	pthread_mutex_lock(mtx);
+	tmp = (long *)target;
 	(*tmp) = value;
 	pthread_mutex_unlock(mtx);
 }
@@ -37,19 +37,23 @@ void	safe_set(pthread_mutex_t *mtx, void *target, long value)
 void	monitor(t_philo *philos, t_com *common)
 {
 	int	i;
+	int	all_done;
 
 	while (1)
 	{
 		i = 0;
+		all_done = 1;
+		usleep(200);
 		while (i < common->philo_cnt)
 		{
-			if ((safe_check(&philos[i].last_eat_mtx, (void *)&philos[i].last_eat, \
+			if ((safe_check(&philos[i].last_eat_mtx, &philos[i].last_eat, \
 			 get_time(&common->start_time)) * -1) >= common->time_die)
 			 {
 				safe_set(&common->ttd_mtx, &common->ttd, 1);
 				print_log(&philos[i], DEATH);
 				return ;
 			 }
+			 
 		}
 	}
 }
@@ -59,7 +63,9 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	while (safe_check(&philo->common->ttd_mtx, (void *)&philo->common->ttd, 1) != 0)
+	if (philo->id % 2 == 1)
+		usleep(MILLI * philo->common->time_eat);
+	while (safe_check(&philo->common->ttd_mtx, &philo->common->ttd, 1) != 0)
 	{
 		if (philo->id % 2 == 0)
 		{

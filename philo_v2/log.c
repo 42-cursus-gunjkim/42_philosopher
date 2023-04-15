@@ -6,7 +6,7 @@
 /*   By: gunjkim <gunjkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 19:42:45 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/04/14 21:48:09 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/04/15 20:09:48 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	spend_time(long time, t_philo *philo)
 long	get_time(struct timeval *start_time)
 {
 	struct timeval	cur_time;
-	long						result;
+	long	result;
 
 	gettimeofday(&cur_time, NULL);
 	result = (cur_time.tv_sec - start_time->tv_sec) * 1000;
@@ -34,24 +34,25 @@ long	get_time(struct timeval *start_time)
 
 void	print_log(t_philo *philo, int status)
 {
-	long	time;
+	long	log_time;
 
+	usleep(100);
 	pthread_mutex_lock(&philo->common->log_mtx);
 	if (safe_check(&philo->common->ttd_mtx, &philo->common->ttd, 1) == 0 && status != DEATH)
 	{
 		pthread_mutex_unlock(&philo->common->log_mtx);
 		return ;
 	}
-	time = get_time(&philo->common->start_time);
+	log_time = get_time(&philo->common->start_time);
 	if (status == PICK)
-		printf("%ld %d has taken a fork\n", time, philo->id);
+		printf("%ld %d has taken a fork\n", log_time, philo->id);
 	else if (status == EAT)
-		printf("%ld %d is eating\n", time, philo->id);
+		printf("%ld %d is eating\n", log_time, philo->id);
 	else if (status == SLEEP)
-		printf("%ld %d is sleeping\n", time, philo->id);
+		printf("%ld %d is sleeping\n", log_time, philo->id);
 	else if (status == THINK)
-		printf("%ld %d is thinking\n", time, philo->id);
+		printf("%ld %d is thinking\n", log_time, philo->id);
 	else if (status == DEATH)
-		printf("%ld %d died\n", time, philo->id);
+		printf("%ld %d died\n", log_time, philo->id);
 	pthread_mutex_unlock(&philo->common->log_mtx);
 }

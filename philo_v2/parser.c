@@ -6,7 +6,7 @@
 /*   By: gunjkim <gunjkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 19:14:27 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/04/14 19:56:43 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/04/15 20:08:44 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,6 @@ int	parse_arg(int argc, char *argv[], t_com *common)
 	if (common->philo_cnt < 1 || common->time_die < 0
 		|| common->time_eat < 0 || common->time_sleep < 0
 		|| (common->full_cnt < 0 && argc == 6))
-		return (0);
-	return (1);
+		return (FALSE);
+	return (TRUE);
 }

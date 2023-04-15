@@ -6,7 +6,7 @@
 /*   By: gunjkim <gunjkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 19:06:32 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/04/14 21:58:44 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/04/15 20:08:45 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@ int	init(t_com *common, t_fork **forks, t_philo **philos)
 	i = 0;
 	*forks = (t_fork *)malloc(sizeof(t_fork) * common->philo_cnt);
 	if (*forks == NULL)
-		return (0);
+		return (FALSE);
 	*philos = (t_philo *)malloc(sizeof(t_philo) * common->philo_cnt);
 	if (*philos == NULL)
 	{
 		free(*forks);
-		return (0);
+		return (FALSE);
 	}
-	common->ttd = 0;
+	common->ttd = FALSE;
 	pthread_mutex_init(&common->ttd_mtx, NULL);
 	while (i < common->philo_cnt)
 	{
@@ -39,7 +39,13 @@ int	init(t_com *common, t_fork **forks, t_philo **philos)
 		(*philos)[i].right = &(*forks)[(i + 1) % common->philo_cnt];
 		(*philos)[i++].common = common;
 	}
-	return (1);
+	return (TRUE);
+}
+
+void	philo_gc(t_fork *forks, t_philo *philos)
+{
+	free(forks);
+	free(philos);
 }
 
 int	main(int argc, char *argv[])
@@ -53,4 +59,5 @@ int	main(int argc, char *argv[])
 	if (!init(&common, &forks, &philos))
 		return (0);
 	spaghetti_time(&common, philos);
+	philo_gc(forks, philos);
 }

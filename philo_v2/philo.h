@@ -6,7 +6,7 @@
 /*   By: gunjkim <gunjkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 14:34:47 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/04/14 21:41:34 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/04/15 20:08:45 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,12 @@ enum e_hand
 {
 	LEFT,
 	RIGHT
+};
+
+enum e_bool
+{
+	FALSE,
+	TRUE
 };
 
 enum e_philo_status

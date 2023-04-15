@@ -15,8 +15,11 @@ $(OBJ_DIR)%.o: %.c
 	@test -d $(OBJ_DIR) || mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -o $@ -c $^
 
-test:
+lldbtest:
 	$(CC) $(CFLAGS) -g -o $(NAME) $(SRCS)
+
+threadtest:
+	$(CC) $(CFLAGS) -fsanitize=thread -o $(NAME) $(SRCS)
 
 tclean: fclean
 	rm -rf philo.dSYM
