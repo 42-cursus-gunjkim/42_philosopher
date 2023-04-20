@@ -6,7 +6,7 @@
 /*   By: gunjkim <gunjkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 19:40:32 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/04/20 17:44:42 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/04/21 00:33:53 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,29 @@
 void	monitor(t_philo *philos, t_com *common)
 {
 	int	i;
-	int	all_done;
 
-	while (1)
+	while (s_check_int(&common->ttd_mtx, &(common->ttd), 1) != 0)
 	{
 		i = 0;
-		all_done = 1;
-		usleep(200);
+		common->all_done = TRUE;
 		while (i < common->philo_cnt)
 		{
-			if ((safe_check_long(&philos[i].last_eat_mtx, &philos[i].last_eat, \
-			get_time(&common->start_time)) * -1) >= common->time_die)
+			if (common->full_cnt != NO_FULL_CNT)
+				s_mul(&philos[i].full_mtx, &philos[i].full, &common->all_done);
+			pthread_mutex_lock(&philos[i].last_eat_mtx);
+			if (get_time(&common->start_time) - philos[i].last_eat \
+			>= common->time_die)
 			{
-				safe_set_int(&common->ttd_mtx, &(common->ttd), 1);
+				s_set_int(&common->ttd_mtx, &(common->ttd), 1);
 				print_log(&philos[i], DEATH);
+				pthread_mutex_unlock(&philos[i].last_eat_mtx);
 				return ;
 			}
+			pthread_mutex_unlock(&philos[i].last_eat_mtx);
+			i++;
 		}
+		if (common->full_cnt != NO_FULL_CNT && common->all_done == TRUE)
+			s_set_int(&common->ttd_mtx, &(common->ttd), 1);
 	}
 }
 
@@ -40,11 +46,11 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	if (philo->id % 2 == 1)
+	if (philo->id % 2 == 0)
 		usleep(MILLI * philo->common->time_eat);
-	while (safe_check_int(&philo->common->ttd_mtx, &philo->common->ttd, 1) != 0)
+	while (s_check_int(&philo->common->ttd_mtx, &philo->common->ttd, 1) != 0)
 	{
-		if (philo->id % 2 == 0)
+		if (philo->id % 2 == 1 || philo->common->philo_cnt % 2 == 1)
 		{
 			take_forks(philo, LEFT);
 			take_forks(philo, RIGHT);
@@ -63,7 +69,7 @@ void	*routine(void *arg)
 	return (NULL);
 }
 
-void	spaghetti_time(t_com *common, t_philo *philos)
+int	spaghetti_time(t_com *common, t_philo *philos)
 {
 	int	i;
 
@@ -72,11 +78,13 @@ void	spaghetti_time(t_com *common, t_philo *philos)
 	while (i < common->philo_cnt)
 	{
 		philos[i].last_eat = get_time(&common->start_time);
-		pthread_create(&philos[i].thread, NULL, &routine, &philos[i]);
+		if (pthread_create(&philos[i].thread, NULL, &routine, &philos[i]) != 0)
+			return (FAIL);
 		i++;
 	}
 	monitor(philos, common);
 	i = 0;
 	while (i < common->philo_cnt)
 		pthread_join(philos[i++].thread, NULL);
+	return (SUCCESS);
 }

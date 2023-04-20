@@ -6,7 +6,7 @@
 /*   By: gunjkim <gunjkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 19:42:45 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/04/20 18:28:49 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/04/20 20:06:08 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	spend_time(long time, t_philo *philo)
 
 	start_time = get_time(&philo->common->start_time);
 	while (get_time(&philo->common->start_time) - start_time < time)
-		usleep(100);
+		usleep(200);
 }
 
 long	get_time(struct timeval *start_time)
@@ -36,9 +36,8 @@ void	print_log(t_philo *philo, int status)
 {
 	long	log_time;
 
-	usleep(100);
 	pthread_mutex_lock(&philo->common->log_mtx);
-	if (safe_check_int(&philo->common->ttd_mtx, &philo->common->ttd, 1) == 0 \
+	if (s_check_int(&philo->common->ttd_mtx, &philo->common->ttd, 1) == 0 \
 	&& status != DEATH)
 	{
 		pthread_mutex_unlock(&philo->common->log_mtx);

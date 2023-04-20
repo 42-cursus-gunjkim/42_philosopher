@@ -6,7 +6,7 @@
 /*   By: gunjkim <gunjkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 14:34:47 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/04/20 17:59:31 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/04/21 00:33:55 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,12 @@ enum e_bool
 	TRUE
 };
 
+enum e_result
+{
+	FAIL,
+	SUCCESS
+};
+
 enum e_philo_status
 {
 	PICK,
@@ -51,7 +57,7 @@ enum e_philo_status
 
 typedef struct s_fork
 {
-	enum e_fork_status	status;
+	int					status;
 	pthread_mutex_t		fork_mtx;
 }	t_fork;
 
@@ -66,15 +72,17 @@ typedef struct s_com
 	int				time_sleep;
 	int				time_die;
 	int				full_cnt;
-	int				all_full;
+	int				all_done;
 }	t_com;
 
 typedef struct s_philo
 {
 	pthread_mutex_t	last_eat_mtx;
+	pthread_mutex_t	full_mtx;
 	pthread_t		thread;
 	int				id;
 	int				total_eat;
+	int				full;
 	long			last_eat;
 	t_com			*common;
 	t_fork			*left;
@@ -89,10 +97,11 @@ void	take_forks(t_philo *philo, int hand);
 void	philo_eat(t_philo *philo);
 void	philo_sleep(t_philo *philo);
 void	spend_time(long time, t_philo *philo);
-void	spaghetti_time(t_com *common, t_philo *philos);
-long	safe_check_long(pthread_mutex_t *mtx, long *target, long value);
-void	safe_set_long(pthread_mutex_t *mtx, long *target, long value);
-int		safe_check_int(pthread_mutex_t *mtx, int *target, int value);
-void	safe_set_int(pthread_mutex_t *mtx, int *target, int value);
+int		spaghetti_time(t_com *common, t_philo *philos);
+long	s_check_long(pthread_mutex_t *mtx, long *target, long value);
+void	s_set_long(pthread_mutex_t *mtx, long *target, long value);
+int		s_check_int(pthread_mutex_t *mtx, int *target, int value);
+void	s_set_int(pthread_mutex_t *mtx, int *target, int value);
+void	s_mul(pthread_mutex_t *mtx, int *target, int *result);
 
 #endif

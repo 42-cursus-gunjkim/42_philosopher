@@ -6,7 +6,7 @@
 /*   By: gunjkim <gunjkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 19:14:27 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/04/20 17:45:27 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/04/21 00:33:55 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,10 @@ int	parse_arg(int argc, char *argv[], t_com *common)
 	common->time_die = ft_atol(argv[2]);
 	common->time_eat = ft_atol(argv[3]);
 	common->time_sleep = ft_atol(argv[4]);
+	common->ttd = FALSE;
+	if (pthread_mutex_init(&common->ttd_mtx, NULL) != 0 || \
+	pthread_mutex_init(&common->log_mtx, NULL) != 0)
+		return (FALSE);
 	if (argc == 6)
 		common->full_cnt = ft_atol(argv[5]);
 	else

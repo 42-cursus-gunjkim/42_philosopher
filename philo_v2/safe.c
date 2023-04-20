@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   safe.c                                             :+:      :+:    :+:   */
+/*   s.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gunjkim <gunjkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,36 +12,43 @@
 
 #include "philo.h"
 
-long	safe_check_long(pthread_mutex_t *mtx, long *target, long value)
+long	s_check_long(pthread_mutex_t *mtx, long *target, long value)
 {
 	long	ret;
 
 	pthread_mutex_lock(mtx);
-	ret = (*target) - value;
+	ret = value - (*target);
 	pthread_mutex_unlock(mtx);
 	return (ret);
 }
 
-void	safe_set_long(pthread_mutex_t *mtx, long *target, long value)
+void	s_set_long(pthread_mutex_t *mtx, long *target, long value)
 {
 	pthread_mutex_lock(mtx);
 	(*target) = value;
 	pthread_mutex_unlock(mtx);
 }
 
-int	safe_check_int(pthread_mutex_t *mtx, int *target, int value)
+int	s_check_int(pthread_mutex_t *mtx, int *target, int value)
 {
 	int	ret;
 
 	pthread_mutex_lock(mtx);
-	ret = (*target) - value;
+	ret = value - (*target);
 	pthread_mutex_unlock(mtx);
 	return (ret);
 }
 
-void	safe_set_int(pthread_mutex_t *mtx, int *target, int value)
+void	s_set_int(pthread_mutex_t *mtx, int *target, int value)
 {
 	pthread_mutex_lock(mtx);
 	(*target) = value;
+	pthread_mutex_unlock(mtx);
+}
+
+void	s_mul(pthread_mutex_t *mtx, int *target, int *result)
+{
+	pthread_mutex_lock(mtx);
+	*result = (*result) * (*target);
 	pthread_mutex_unlock(mtx);
 }
