@@ -3,7 +3,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
 OBJ_DIR = ./obj/
-SRCS = philo.c log.c parser.c spaghetti_time.c spaghetti_util.c safe.c
+SRCS = philo_bonus.c log_bonus.c parser_bonus.c spaghetti_time_bonus.c spaghetti_time_util_bonus.c
 OBJS = $(addprefix $(OBJ_DIR), $(SRCS:.c=.o))
 
 all: $(NAME)
