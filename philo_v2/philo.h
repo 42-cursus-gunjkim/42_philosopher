@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gunjkim <gunjkim@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: gunjkim <gunjkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 14:34:47 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/04/15 20:08:45 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/04/20 17:59:31 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,18 +60,18 @@ typedef struct s_com
 	pthread_mutex_t	log_mtx;
 	pthread_mutex_t	ttd_mtx;
 	struct timeval	start_time;
-	int			ttd;
+	int				ttd;
 	int				philo_cnt;
-	int			time_eat;
-	int			time_sleep;
-	int			time_die;
+	int				time_eat;
+	int				time_sleep;
+	int				time_die;
 	int				full_cnt;
 	int				all_full;
 }	t_com;
 
 typedef struct s_philo
 {
-	pthread_mutex_t last_eat_mtx;
+	pthread_mutex_t	last_eat_mtx;
 	pthread_t		thread;
 	int				id;
 	int				total_eat;
@@ -81,7 +81,7 @@ typedef struct s_philo
 	t_fork			*right;
 }	t_philo;
 
-int	parse_arg(int argc, char *argv[], t_com *common);
+int		parse_arg(int argc, char *argv[], t_com *common);
 void	print_log(t_philo *philo, int status);
 long	get_time(struct timeval *start_time);
 void	put_forks(t_philo *philo);
@@ -90,7 +90,9 @@ void	philo_eat(t_philo *philo);
 void	philo_sleep(t_philo *philo);
 void	spend_time(long time, t_philo *philo);
 void	spaghetti_time(t_com *common, t_philo *philos);
-int	safe_check(pthread_mutex_t *mtx, void	*target, long value);
-void	safe_set(pthread_mutex_t *mtx, void	*target, long value);
+long	safe_check_long(pthread_mutex_t *mtx, long *target, long value);
+void	safe_set_long(pthread_mutex_t *mtx, long *target, long value);
+int		safe_check_int(pthread_mutex_t *mtx, int *target, int value);
+void	safe_set_int(pthread_mutex_t *mtx, int *target, int value);
 
 #endif

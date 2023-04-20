@@ -3,36 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   spaghetti_time.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gunjkim <gunjkim@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: gunjkim <gunjkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 19:40:32 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/04/15 20:14:38 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/04/20 17:44:42 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-int	safe_check(pthread_mutex_t *mtx, void *target, long value)
-{
-	int ret;
-	long	*tmp;
-
-	pthread_mutex_lock(mtx);
-	tmp = (long *)target;
-	ret = (*tmp) - value;
-	pthread_mutex_unlock(mtx);
-	return (ret);
-}
-
-void	safe_set(pthread_mutex_t *mtx, void *target, long value)
-{
-	long	*tmp;
-
-	pthread_mutex_lock(mtx);
-	tmp = (long *)target;
-	(*tmp) = value;
-	pthread_mutex_unlock(mtx);
-}
 
 void	monitor(t_philo *philos, t_com *common)
 {
@@ -46,14 +24,13 @@ void	monitor(t_philo *philos, t_com *common)
 		usleep(200);
 		while (i < common->philo_cnt)
 		{
-			if ((safe_check(&philos[i].last_eat_mtx, &philos[i].last_eat, \
-			 get_time(&common->start_time)) * -1) >= common->time_die)
-			 {
-				safe_set(&common->ttd_mtx, &common->ttd, 1);
+			if ((safe_check_long(&philos[i].last_eat_mtx, &philos[i].last_eat, \
+			get_time(&common->start_time)) * -1) >= common->time_die)
+			{
+				safe_set_int(&common->ttd_mtx, &(common->ttd), 1);
 				print_log(&philos[i], DEATH);
 				return ;
-			 }
-			 
+			}
 		}
 	}
 }
@@ -65,7 +42,7 @@ void	*routine(void *arg)
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 1)
 		usleep(MILLI * philo->common->time_eat);
-	while (safe_check(&philo->common->ttd_mtx, &philo->common->ttd, 1) != 0)
+	while (safe_check_int(&philo->common->ttd_mtx, &philo->common->ttd, 1) != 0)
 	{
 		if (philo->id % 2 == 0)
 		{
@@ -88,7 +65,7 @@ void	*routine(void *arg)
 
 void	spaghetti_time(t_com *common, t_philo *philos)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	gettimeofday(&common->start_time, NULL);

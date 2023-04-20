@@ -1,0 +1,6 @@
+{
+	"files.associations": {
+		"ios": "c",
+		"philo.h": "c"
+	}
+}

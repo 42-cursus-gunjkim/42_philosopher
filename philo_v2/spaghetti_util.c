@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   spaghetti_util.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gunjkim <gunjkim@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: gunjkim <gunjkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 20:13:48 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/04/15 20:11:55 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/04/20 17:42:49 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	philo_eat(t_philo *philo)
 {
 	print_log(philo, EAT);
-	safe_set(&philo->last_eat_mtx, (void *)&philo->last_eat, \
+	safe_set_long(&philo->last_eat_mtx, &philo->last_eat, \
 	get_time(&philo->common->start_time));
 	spend_time(philo->common->time_eat, philo);
 	philo->total_eat++;
