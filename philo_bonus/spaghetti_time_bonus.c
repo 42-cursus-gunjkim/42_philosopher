@@ -6,7 +6,7 @@
 /*   By: gunjkim <gunjkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 02:10:41 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/04/21 06:00:10 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/04/21 10:45:42 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ void	philo_do(t_philo *philo)
 {
 	pthread_t	monitor_thread;
 
+	if (philo->id % 2 == 0)
+		usleep(philo->common->time_eat * 500);
 	pthread_create(&monitor_thread, NULL, philo_monitor, philo);
 	pthread_detach(monitor_thread);
-	if (philo->id % 2 == 0)
-		usleep(philo->common->time_eat * 1000);
 	while (1)
 	{
 		philo_routine(philo);
@@ -42,7 +42,7 @@ void	kill_all_process(pid_t *pid_arr, int philo_cnt)
 
 	i = 0;
 	while (i < philo_cnt)
-		kill(pid_arr[i++], SIGINT);
+		kill(pid_arr[i++], SIGKILL);
 	i = 0;
 	while (i < philo_cnt)
 		waitpid(pid_arr[i++], &status, 0);

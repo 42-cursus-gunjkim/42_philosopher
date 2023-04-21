@@ -6,11 +6,17 @@
 /*   By: gunjkim <gunjkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 03:18:58 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/04/21 05:59:58 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/04/21 10:54:07 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
+
+void	kill_exit(void)
+{
+	kill(0, SIGINT);
+	exit(0);
+}
 
 void	philo_routine(t_philo *philo)
 {
@@ -19,6 +25,7 @@ void	philo_routine(t_philo *philo)
 	sem_wait(philo->common->forks);
 	print_log(philo, PICK);
 	philo->last_eat = get_time(&philo->common->start_time);
+	philo->total_eat++;
 	print_log(philo, EAT);
 	spend_time(philo->common->time_eat, philo);
 	sem_post(philo->common->forks);

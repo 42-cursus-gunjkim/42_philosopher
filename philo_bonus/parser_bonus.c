@@ -6,7 +6,7 @@
 /*   By: gunjkim <gunjkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 01:58:06 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/04/21 05:47:20 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/04/21 10:38:03 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,9 @@ int	parse_arg(int argc, char *argv[], t_com *common)
 	common->time_die = ft_atol(argv[2]);
 	common->time_eat = ft_atol(argv[3]);
 	common->time_sleep = ft_atol(argv[4]);
+	sem_unlink("log");
+	sem_unlink("forks");
+	sem_unlink("simul");
 	common->log_sem = sem_open("log", O_CREAT, 0600, 1);
 	common->forks = sem_open("forks", O_CREAT, 0600, common->philo_cnt);
 	common->simul = sem_open("simul", O_CREAT, 0600, 1);

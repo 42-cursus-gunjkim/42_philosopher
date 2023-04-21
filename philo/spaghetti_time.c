@@ -6,7 +6,7 @@
 /*   By: gunjkim <gunjkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 19:40:32 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/04/21 00:33:53 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/04/21 11:03:24 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	*routine(void *arg)
 
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
-		usleep(MILLI * philo->common->time_eat);
+		usleep(500 * philo->common->time_eat);
 	while (s_check_int(&philo->common->ttd_mtx, &philo->common->ttd, 1) != 0)
 	{
 		if (philo->id % 2 == 1 || philo->common->philo_cnt % 2 == 1)
