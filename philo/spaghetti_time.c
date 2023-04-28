@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   spaghetti_time.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gunjkim <gunjkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gunjkim <gunjkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 19:40:32 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/04/21 11:03:24 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/04/28 11:23:25 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,11 @@ void	monitor(t_philo *philos, t_com *common)
 {
 	int	i;
 
-	while (s_check_int(&common->ttd_mtx, &(common->ttd), 1) != 0)
+	while (1)
 	{
 		i = 0;
 		common->all_done = TRUE;
+		usleep(100);
 		while (i < common->philo_cnt)
 		{
 			if (common->full_cnt != NO_FULL_CNT)
@@ -37,7 +38,10 @@ void	monitor(t_philo *philos, t_com *common)
 			i++;
 		}
 		if (common->full_cnt != NO_FULL_CNT && common->all_done == TRUE)
+		{
 			s_set_int(&common->ttd_mtx, &(common->ttd), 1);
+			return ;
+		}
 	}
 }
 
@@ -48,7 +52,7 @@ void	*routine(void *arg)
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
 		usleep(500 * philo->common->time_eat);
-	while (s_check_int(&philo->common->ttd_mtx, &philo->common->ttd, 1) != 0)
+	while ( s_check_int(&philo->common->ttd_mtx, &philo->common->ttd, 1) != 0)
 	{
 		if (philo->id % 2 == 1 || philo->common->philo_cnt % 2 == 1)
 		{

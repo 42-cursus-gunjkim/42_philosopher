@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   spaghetti_time_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gunjkim <gunjkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gunjkim <gunjkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 02:10:41 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/04/21 10:45:42 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/04/28 10:04:00 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,10 @@ void	kill_all_process(pid_t *pid_arr, int philo_cnt)
 int	spaghetti_time(t_com *common)
 {
 	int		i;
-	int		p_cnt;
 	pid_t	*pid_arr;
 	t_philo	philo;
 
 	i = 0;
-	p_cnt = 0;
 	pid_arr = (pid_t *)malloc(sizeof(pid_t) * common->philo_cnt);
 	gettimeofday(&common->start_time, NULL);
 	sem_wait(common->simul);

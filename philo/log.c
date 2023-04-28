@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   log.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gunjkim <gunjkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gunjkim <gunjkim@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 19:42:45 by gunjkim           #+#    #+#             */
-/*   Updated: 2023/04/20 20:06:08 by gunjkim          ###   ########.fr       */
+/*   Updated: 2023/04/28 11:13:03 by gunjkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	spend_time(long time, t_philo *philo)
 
 	start_time = get_time(&philo->common->start_time);
 	while (get_time(&philo->common->start_time) - start_time < time)
-		usleep(200);
+		usleep(100);
 }
 
 long	get_time(struct timeval *start_time)
